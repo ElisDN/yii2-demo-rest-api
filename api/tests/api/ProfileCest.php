@@ -39,6 +39,7 @@ class ProfileCest
             'username' => 'erau',
             'email' => 'sfriesen@jenkins.info',
         ]);
+        $I->dontSeeResponseJsonMatchesJsonPath('$.password_hash');
     }
 
     public function expired(ApiTester $I)
