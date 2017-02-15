@@ -49,7 +49,9 @@ return [
             'rules' => [
                 '' => 'site/index',
                 'auth' => 'site/login',
+
                 'GET profile' => 'profile/index',
+                'PUT,PATCH profile' => 'profile/update',
 
                 [
                     'class' => 'yii\rest\UrlRule',

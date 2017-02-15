@@ -10,6 +10,7 @@ return [
         'created_at' => '1392559490',
         'updated_at' => '1392559490',
         'email' => 'sfriesen@jenkins.info',
+        'description' => null,
     ],
     [
         'id' => 2,
@@ -20,5 +21,6 @@ return [
         'created_at' => '1392559490',
         'updated_at' => '1392559490',
         'email' => 'john@jenkins.info',
+        'description' => null,
     ],
 ];

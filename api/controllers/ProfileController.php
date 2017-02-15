@@ -3,10 +3,12 @@
 namespace api\controllers;
 
 use common\models\User;
+use Yii;
 use yii\filters\AccessControl;
 use yii\filters\auth\HttpBasicAuth;
 use yii\filters\auth\HttpBearerAuth;
 use yii\rest\Controller;
+use yii\web\ServerErrorHttpException;
 
 class ProfileController extends Controller
 {
@@ -37,10 +39,23 @@ class ProfileController extends Controller
         return $this->findModel();
     }
 
+    public function actionUpdate()
+    {
+        $model = $this->findModel();
+
+        $model->load(Yii::$app->request->getBodyParams(), '');
+        if ($model->save() === false && !$model->hasErrors()) {
+            throw new ServerErrorHttpException('Failed to update the object for unknown reason.');
+        }
+
+        return $model;
+    }
+
     public function verbs()
     {
         return [
             'index' => ['get'],
+            'update' => ['put', 'patch'],
         ];
     }
 
