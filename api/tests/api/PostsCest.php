@@ -34,6 +34,20 @@ class PostsCest
         $I->seeHttpHeader('X-Pagination-Total-Count', 3);
     }
 
+    public function indexWithAuthor(ApiTester $I)
+    {
+        $I->sendGET('/posts?expand=author');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseContainsJson([
+            [
+                'title' => 'First Post',
+                'author' => [
+                    'username' => 'erau',
+                ],
+            ]
+        ]);
+    }
+
     public function search(ApiTester $I)
     {
         $I->sendGET('/posts?s[title]=First');

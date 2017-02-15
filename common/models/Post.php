@@ -67,4 +67,11 @@ class Post extends ActiveRecord
     {
         return new PostQuery(get_called_class());
     }
+
+    public function extraFields()
+    {
+        return [
+            'author' => 'user',
+        ];
+    }
 }
