@@ -216,6 +216,7 @@ class User extends ActiveRecord implements IdentityInterface
             'id' => 'id',
             'username' => 'username',
             'email' => 'email',
+            'description' => 'description',
         ];
     }
 }
