@@ -5,6 +5,8 @@ namespace common\models;
 use common\models\query\PostQuery;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\helpers\Url;
+use yii\web\Linkable;
 
 /**
  * This is the model class for table "{{%post}}".
@@ -18,7 +20,7 @@ use yii\db\ActiveRecord;
  *
  * @property User $user
  */
-class Post extends ActiveRecord
+class Post extends ActiveRecord implements Linkable
 {
     public static function tableName()
     {
@@ -72,6 +74,13 @@ class Post extends ActiveRecord
     {
         return [
             'author' => 'user',
+        ];
+    }
+
+    public function getLinks()
+    {
+        return [
+            'self' => Url::to(['post/view', 'id' => $this->id], true),
         ];
     }
 }
