@@ -53,11 +53,7 @@ return [
                 'GET profile' => 'profile/index',
                 'PUT,PATCH profile' => 'profile/update',
 
-                [
-                    'class' => 'yii\rest\UrlRule',
-                    'controller' => 'post',
-                    'only' => ['index', 'view', 'options'],
-                ],
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'post'],
             ],
         ],
     ],

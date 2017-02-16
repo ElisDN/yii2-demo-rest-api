@@ -4,6 +4,7 @@ namespace api\tests\api;
 
 use \api\tests\ApiTester;
 use common\fixtures\PostFixture;
+use common\fixtures\TokenFixture;
 use common\fixtures\UserFixture;
 
 class PostsCest
@@ -14,6 +15,10 @@ class PostsCest
             'user' => [
                 'class' => UserFixture::className(),
                 'dataFile' => codecept_data_dir() . 'user.php'
+            ],
+            'token' => [
+                'class' => TokenFixture::className(),
+                'dataFile' => codecept_data_dir() . 'token.php'
             ],
             'post' => [
                 'class' => PostFixture::className(),
@@ -76,11 +81,74 @@ class PostsCest
         $I->seeResponseCodeIs(404);
     }
 
-    public function readonly(ApiTester $I)
+    public function createUnauthorized(ApiTester $I)
     {
-        $I->sendPATCH('/posts/15', [
+        $I->sendPOST('/posts', [
+            'title' => 'New Post',
+        ]);
+        $I->seeResponseCodeIs(401);
+    }
+
+    public function create(ApiTester $I)
+    {
+        $I->amBearerAuthenticated('token-correct');
+        $I->sendPOST('/posts', [
+            'title' => 'New Post',
+        ]);
+        $I->seeResponseCodeIs(201);
+        $I->seeResponseContainsJson([
+            'user_id' => 1,
+            'title' => 'New Post',
+        ]);
+    }
+
+    public function updateUnauthorized(ApiTester $I)
+    {
+        $I->sendPATCH('/posts/1', [
             'title' => 'New Title',
         ]);
-        $I->seeResponseCodeIs(405);
+        $I->seeResponseCodeIs(401);
+    }
+
+    public function update(ApiTester $I)
+    {
+        $I->amBearerAuthenticated('token-correct');
+        $I->sendPATCH('/posts/1', [
+            'title' => 'New Title',
+        ]);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseContainsJson([
+            'id' => 1,
+            'title' => 'New Title',
+        ]);
+    }
+
+    public function updateForbidden(ApiTester $I)
+    {
+        $I->amBearerAuthenticated('token-correct');
+        $I->sendPATCH('/posts/2', [
+            'title' => 'New Title',
+        ]);
+        $I->seeResponseCodeIs(403);
+    }
+
+    public function deleteUnauthorized(ApiTester $I)
+    {
+        $I->sendDELETE('/posts/1');
+        $I->seeResponseCodeIs(401);
+    }
+
+    public function delete(ApiTester $I)
+    {
+        $I->amBearerAuthenticated('token-correct');
+        $I->sendDELETE('/posts/1');
+        $I->seeResponseCodeIs(204);
+    }
+
+    public function deleteForbidden(ApiTester $I)
+    {
+        $I->amBearerAuthenticated('token-correct');
+        $I->sendDELETE('/posts/2');
+        $I->seeResponseCodeIs(403);
     }
 }
